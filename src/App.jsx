@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import {DialogMessage} from './components/DialogMessage.jsx'
+import {PostulationCard} from './components/PostulationCard.jsx'
 
 
 function App() {
@@ -58,7 +60,6 @@ const submitPostulation=(e , positionId)=>{
         })
         return
       }
-      console.log(data.ok)
       setMessage({
        open:true,
         type:"success",
@@ -71,34 +72,14 @@ const submitPostulation=(e , positionId)=>{
   return (
       <>
     {loading?<>Cargando...</>: <>
-    {message.open && <span className={message.type} >
-      <div className="span-body"> 
-      <h4>{message.text}</h4>
-      <button onClick={()=>setMessage({
-        open:false,
-        type:"",
-        text:""
-        }
-        )}>X</button>
-      </div>
-    </span>
+    {message.open && <DialogMessage message={message} setMessage={setMessage}/>
 
     }
      <h1>Listado de posiciones abiertas</h1>
      <div>
        <ul className="listOpenPosition">
-        {listOpenPositions.map(position=>(          
-          <li className="form"  key={position.id}>
-            <form  id={position.id} onSubmit={(e)=>submitPostulation(e, position.id)}>
-                <h3>{position.title}</h3>
-                <div className="card-form">
-                  <label htmlFor="repository">Postulate!</label>
-                  <input type="text" name="repository" placeholder="URL de tu repositorio"
-               required></input>
-                  <button type="submit">Enviar postulación</button>
-                </div>
-            </form>
-          </li>
+        {listOpenPositions?.map(position=>(          
+          <PostulationCard key={position.id} position={position} submitPostulation={submitPostulation}/>
           ))
           }        
       </ul>
